@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/common_action_bar_splitter"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="300dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
+
+        <View
+            android:id="@+id/separator1"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:id="@+id/label_id"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:text="ID:"
+
+            />
+
+
+        <TextView
+            android:id="@+id/label_status"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/separator1"
+            android:text="Status:"
+
+            />
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@id/separator1"
+            android:layout_toRightOf="@id/label_id"
+            android:textSize="@dimen/label_contents"
+            />
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/label_status"
+            android:textSize="@dimen/label_contents"/>
+
+        <TextView
+            android:id="@+id/label_descricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separator1"
+            android:text="Descrição"
+            android:textSize="@dimen/labels"
+            />
+
+        <View
+            android:id="@+id/separator2"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/tv_criacao"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/separator2"
+            android:textSize="10sp"/>
+        <TextView
+            android:id="@+id/tv_modificacao"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/separator2"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/label_criacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_criacao"
+            android:layout_toLeftOf="@id/separator2"
+            android:text="Created"
+            android:textSize="@dimen/labels"
+            />
+        <TextView
+            android:id="@+id/label_modificacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_modificacao"
+            android:layout_toRightOf="@id/separator2"
+            android:gravity="right"
+            android:text="Last Modified"
+            android:textSize="@dimen/labels"/>
+        <TextView
+            android:id="@+id/tv_requerente"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_above="@id/separator2"
+            android:textSize="@dimen/label_contents"/>
+        <View
+            android:id="@+id/separator3"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_above="@id/tv_requerente"/>
+        <TextView
+            android:id="@+id/label_requerente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_requerente"
+            android:layout_alignBottom="@id/separator3"
+            android:text="Requerent"
+            android:textSize="@dimen/labels"/>
+
+        <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/label_descricao"
+            android:layout_above="@id/separator3"
+            android:fillViewport="false"
+            android:background="@android:color/white"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_descricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/label_contents"
+                    />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GDriveTest</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="bt_newproject">new project</string>
+    <string name="createnewproject_titulo">Titulo</string>
+    <string name="createnewproject_descricao">Descrição</string>
+    <string name="createnewproject_gerente">Gerente</string>
+    <string name="title_activity_requirements">RequirementsActivity</string>
+    <string name="createnewproject_requerente">Requerente</string>
+
+</resources>
