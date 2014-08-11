@@ -78,8 +78,8 @@ public class RepositorioRequirements {
         //String query = "select * from " + SCRIPTS.TABLE_REQUIREMENTS+ " where "+SCRIPTS.PROJECT_ID+"=" + projeto.getId() + ";";
 
         String query = new QUERY().select().from(SCRIPTS.TABLE_REQUIREMENTS)
-                                    .where().whereClause(SCRIPTS.PROJECT_ID,projeto.getId())
-                                    .finish();
+                .where().whereClause(SCRIPTS.PROJECT_ID,projeto.getId())
+                .finish();
 
         //Log.d("DEBUG", query);
 
@@ -177,4 +177,23 @@ public class RepositorioRequirements {
 
         return requirements;
     }
+
+    public int updateRequirement(Requisito requisito){
+        ContentValues values = new ContentValues();
+
+        values.put(SCRIPTS.REQUIREMENT_TITLE, requisito.getTitulo());
+        values.put(SCRIPTS.REQUIREMENT_DESCRIPTION, requisito.getDescricao());
+        values.put(SCRIPTS.REQUIREMENT_REQUESTER, requisito.getRequerente());
+        values.put(SCRIPTS.REQUIREMENT_STATUS, requisito.getStatus().toString());
+        values.put(SCRIPTS.REQUIREMENT_DATE_MODIFICATION, requisito.getDataModificacao().getTime());
+        values.put(SCRIPTS.REQUIREMENT_TYPE, requisito.getType().toString());
+
+        //preicsa atualizar os dependentes
+
+
+        return mDB.update(SCRIPTS.TABLE_REQUIREMENTS, values, SCRIPTS.REQUIREMENT_ID+"="+requisito.getId(), null);
+
+    }
+
 }
+
