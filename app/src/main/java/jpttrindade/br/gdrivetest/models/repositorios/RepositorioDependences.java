@@ -4,11 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-import jpttrindade.br.gdrivetest.models.Requisito;
+import jpttrindade.br.gdrivetest.models.Dependence;
 
 /**
  * Created by jpttrindade on 10/08/14.
@@ -31,55 +30,51 @@ public class RepositorioDependences {
         return  singleton;
     }
 
-    public long addDependence(Requisito req, Requisito dependent){
+    public long insertDependence(Dependence dependence){
         ContentValues values = new ContentValues();
 
-        values.put(SCRIPTS.DEPENDENCE_ID_REQUIREMENT, req.getId());
-        values.put(SCRIPTS.DEPENDENCE_ID_PROJECT, req.getProjeto().getId());
-        values.put(SCRIPTS.DEPENDENCE_ID_DEPENDENT, dependent.getId());
+        values.put(SCRIPTS.DEPENDENCE_ID_REQUIREMENT, dependence.getId_requirement());
+        values.put(SCRIPTS.DEPENDENCE_ID_PROJECT, dependence.getId_project());
+        values.put(SCRIPTS.DEPENDENCE_ID_DEPENDENT, dependence.getId_dependent());
 
         return mDB.insert(SCRIPTS.TABLE_DEPENDENCE,null, values);
     }
 
-    public ArrayList<String> getDependents(String id_requirement, String id_project) {
+    public ArrayList<Dependence> getDependencies(String id_requirement, String id_project) {
 
-        ArrayList<String> ids_dependents= new ArrayList<String>();
-        ArrayList<Requisito> dependents = new ArrayList<Requisito>();
+
+        ArrayList<Dependence> dependencies = new ArrayList<Dependence>();
 
         String query = new QUERY().select(SCRIPTS.DEPENDENCE_ID_DEPENDENT).from(SCRIPTS.TABLE_DEPENDENCE)
                                     .where().whereClause(SCRIPTS.DEPENDENCE_ID_REQUIREMENT,id_requirement)
-                                    .and().whereClause(SCRIPTS.DEPENDENCE_ID_PROJECT, id_project).finish();
+                                    .and().whereClause(SCRIPTS.DEPENDENCE_ID_PROJECT, id_project)
+                                    .finish();
 
         Cursor c = mDB.rawQuery(query, null);
         /*Cursor c = mDB.rawQuery("select "+SCRIPTS.DEPENDENCE_ID_DEPENDENT+" from "+SCRIPTS.TABLE_DEPENDENCE+
                             " where "+SCRIPTS.DEPENDENCE_ID_REQUIREMENT+"="+id_requirement+
                             " and "+SCRIPTS.DEPENDENCE_ID_PROJECT+"="+id_project+";", null);
 */
+
         if(c.getCount()>0){
             c.moveToFirst();
-            int x;
             do{
-                x = c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_DEPENDENT));
-
-                Log.d("DEBUG", "id dependent - " +x);
-
-                ids_dependents.add(""+x);
+                dependencies.add(setDependent(c, id_requirement, id_project));
             }while (c.moveToNext());
         }
         c.close();
 
-
-
-        return ids_dependents;
-
-
+        return dependencies;
     }
 
 
+    private Dependence setDependent(Cursor c, String id_requirement,String id_project){
+/*        String id_requirement = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_REQUIREMENT));
+        String id_project = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_PROJECT));*/
+        String id_dependent = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_DEPENDENT));
 
-    private class Dependents{
-        String id_requirement;
-        String id_projeto;
-        String id_dependent;
+        Dependence nDependence = new Dependence(id_requirement, id_project, id_dependent);
+
+        return nDependence;
     }
 }

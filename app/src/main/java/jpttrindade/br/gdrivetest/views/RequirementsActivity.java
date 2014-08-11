@@ -40,7 +40,9 @@ public class RequirementsActivity extends ActionBarActivity {
 
         projeto = (Projeto) getIntent().getParcelableExtra("projeto");
 
-        adapter = new RequirementsAdapter(this, projeto);
+        adapter = new RequirementsAdapter(this, projeto, requirements);
+
+        requirements = adapter.getRequirements();
 
         lv_requirements.setAdapter(adapter);
 
@@ -50,6 +52,7 @@ public class RequirementsActivity extends ActionBarActivity {
 
                 Intent it = new Intent(RequirementsActivity.this, CreateNewRequirementActivity.class);
                 it.putExtra("projeto", projeto);
+                it.putParcelableArrayListExtra("requirements", requirements);
                 startActivityForResult(it, CREATE_NEW_REQUIREMENT);
             }
         });

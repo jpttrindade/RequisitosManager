@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import jpttrindade.br.gdrivetest.R;
+import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.Requisito;
 
 /**
@@ -17,22 +18,22 @@ import jpttrindade.br.gdrivetest.models.Requisito;
  */
 public class DependentsAdapter extends BaseAdapter {
 
-    private ArrayList<Requisito> dependents;
+    private ArrayList<Dependence> dependencies;
      private Context mContext;
 
-    public DependentsAdapter(Context context, ArrayList<Requisito> dependents){
+    public DependentsAdapter(Context context, ArrayList<Dependence> dependencies){
         mContext = context;
-        this.dependents = dependents;
+        this.dependencies = dependencies;
     }
 
     @Override
     public int getCount() {
-        return dependents.size();
+        return dependencies.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return dependents.get(position);
+        return dependencies.get(position);
     }
 
     @Override
@@ -46,10 +47,10 @@ public class DependentsAdapter extends BaseAdapter {
 
         TextView tv_id = (TextView) convertView.findViewById(R.id.tv_id);
         TextView tv_title = (TextView) convertView.findViewById(R.id.tv_title);
-        Requisito req = dependents.get(position);
+        Dependence dependence = dependencies.get(position);
 
-        tv_id.setText(req.getId());
-        tv_title.setText(req.getTitulo());
+        tv_id.setText(dependence.getId_dependent());
+        tv_title.setText(dependence.getDescription());
         return convertView;
     }
 }

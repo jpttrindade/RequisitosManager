@@ -22,10 +22,10 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
     private RequerimentType type;
     private Projeto projeto;
-    private ArrayList<Requisito> dependentes;
+    private ArrayList<Dependence> dependentes;
 
     public Requisito(String titulo, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
-                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Requisito> dependentes) {
+                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Dependence> dependentes) {
         super(titulo);
         this.descricao = descricao;
         this.status = status;
@@ -35,11 +35,12 @@ public class Requisito extends SubItemMenu implements Parcelable{
         this.requerente = requerente;
         this.projeto = projeto;
         this.dependentes = dependentes;
+
     }
 
 
     public Requisito(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
-                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Requisito> dependentes) {
+                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Dependence> dependentes) {
         super(titulo);
         this.id = id;
         this.descricao = descricao;
@@ -51,6 +52,8 @@ public class Requisito extends SubItemMenu implements Parcelable{
         this.projeto = projeto;
         this.dependentes = dependentes;
     }
+
+
 
     public Requisito(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
                      Date dataModificacao, String requerente, Projeto projeto) {
@@ -66,7 +69,7 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
     }
 
-    public ArrayList<Requisito> getDependentes() {
+    public ArrayList<Dependence> getDependentes() {
         return dependentes;
     }
 

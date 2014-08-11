@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.Projeto;
 import jpttrindade.br.gdrivetest.models.RequerimentType;
 import jpttrindade.br.gdrivetest.models.RequirementStatus;
@@ -36,7 +37,7 @@ public class RepositorioRequirements {
         return singleton;
     }
 
-    public long addRequirement(Requisito nRequirement){
+    public long insertRequirement(Requisito nRequirement){
 
         ContentValues values = new ContentValues();
 
@@ -63,8 +64,9 @@ public class RepositorioRequirements {
 
         RepositorioDependences repoDependents = RepositorioDependences.getInstance(mContext);
 
-        for(Requisito dependent : nRequirement.getDependentes()){
-            long newID = repoDependents.addDependence(nRequirement,dependent);
+        for(Dependence dependence : nRequirement.getDependentes()){
+            dependence.setId_requirement(nRequirement.getId());
+            long newID = repoDependents.insertDependence(dependence);
             Log.d("DEBUG", "id_dependent --- "+newID);
         }
 
@@ -102,13 +104,11 @@ public class RepositorioRequirements {
                 Date dataModificacao = new Date(Long.parseLong(c.getString(c.getColumnIndex(SCRIPTS.REQUIREMENT_DATE_MODIFICATION))));
                 String requerente = c.getString(c.getColumnIndex(SCRIPTS.REQUIREMENT_REQUESTER));
                 Projeto proj = projeto;
-                ArrayList<Requisito> dependentes = new ArrayList<Requisito>();
 
-                ArrayList<String> ids_dependents = RepositorioDependences.getInstance(mContext).getDependents(id, projeto.getId());
+                ArrayList<Dependence> dependences = RepositorioDependences.getInstance(mContext).getDependencies(id, projeto.getId());
 
-                dependentes.addAll(getRequisitos(projeto, ids_dependents));
 
-                requisitos.add(new Requisito(titulo, id, descricao, status,type, dataCriacao, dataModificacao, requerente, proj, dependentes));
+                requisitos.add(new Requisito(titulo, id, descricao, status,type, dataCriacao, dataModificacao, requerente, proj, dependences));
 
             } while(c.moveToNext());
         }

@@ -30,10 +30,10 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
     private ArrayList<Requisito> requirements;
     private Projeto projeto;
 
-    public RequirementsAdapter(Context ctx, Projeto projeto){
+    public RequirementsAdapter(Context ctx, Projeto projeto, ArrayList<Requisito> requirements){
         mContext = ctx;
         this.projeto = projeto;
-        requirements = new ArrayList<Requisito>();
+        this.requirements = requirements;
 
         new GetRequirementsAsyncTask().execute();
     }
@@ -123,6 +123,9 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
     }
 
 
+    public ArrayList<Requisito> getRequirements() {
+        return requirements;
+    }
 
     public void addRequirement(Requisito nReq){
         requirements.add(nReq);

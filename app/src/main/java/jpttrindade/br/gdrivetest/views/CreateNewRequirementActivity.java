@@ -1,9 +1,7 @@
 package jpttrindade.br.gdrivetest.views;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +15,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 import jpttrindade.br.gdrivetest.R;
+import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.Projeto;
 import jpttrindade.br.gdrivetest.models.RequerimentType;
 import jpttrindade.br.gdrivetest.models.RequirementStatus;
 import jpttrindade.br.gdrivetest.models.Requisito;
-import jpttrindade.br.gdrivetest.models.repositorios.RepositorioDependences;
 import jpttrindade.br.gdrivetest.models.repositorios.RepositorioRequirements;
 
 /**
@@ -51,7 +48,7 @@ public class CreateNewRequirementActivity  extends Activity{
 
     private String titulo, descricao, requerente;
     private ArrayList<Requisito> requirements;
-    private ArrayList<Requisito> dependentes;
+    private ArrayList<Dependence> dependentes;
 
     private void initialize() {
         requerente = descricao = titulo = "";
@@ -81,7 +78,9 @@ public class CreateNewRequirementActivity  extends Activity{
 
         spinnerType.setAdapter(adapterType);
 
-        dependentes = new ArrayList<Requisito>();
+        requirements = getIntent().getParcelableArrayListExtra("requirements");
+
+        dependentes = new ArrayList<Dependence>();
         ll_container = (LinearLayout) findViewById(R.id.ll_container);
 
     }
@@ -94,7 +93,9 @@ public class CreateNewRequirementActivity  extends Activity{
 
         initialize();
 
-        new DependetsAsyncTask().execute(projeto);
+       // new DependetsAsyncTask().execute(projeto);
+
+        setDependences();
 
         spinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -132,7 +133,7 @@ public class CreateNewRequirementActivity  extends Activity{
                     Requisito nRequisito = new Requisito(titulo, id, descricao, status, type, dataCricacao, dataCricacao,
                             requerente, projeto, dependentes);
 
-                    RepositorioRequirements.getInstance(CreateNewRequirementActivity.this).addRequirement(nRequisito);
+                    RepositorioRequirements.getInstance(CreateNewRequirementActivity.this).insertRequirement(nRequisito);
 
 
                     Intent it = new Intent();
@@ -160,6 +161,7 @@ public class CreateNewRequirementActivity  extends Activity{
 
     }
 
+
     private boolean isValid() {
         boolean valid = false;
 
@@ -181,6 +183,37 @@ public class CreateNewRequirementActivity  extends Activity{
         return valid;
     }
 
+    private void setDependences() {
+        LayoutInflater inflater = LayoutInflater.from(CreateNewRequirementActivity.this);
+        CheckBox checkbox = null;
+        Dependence dependence;
+        for(Requisito req : requirements){
+            checkbox = (CheckBox) inflater.inflate(R.layout.checkbox_dependents,null);
+            checkbox.setText(req.getTitulo());
+            dependence = new Dependence(projeto.getId(), req.getId());
+
+            dependence.setTitle(req.getTitulo());
+            dependence.setDescription(req.getDescricao());
+            checkbox.setTag(dependence);
+
+            checkbox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+
+                        dependentes.add((Dependence)buttonView.getTag());
+                    }else {
+                        dependentes.remove((Dependence)buttonView.getTag());
+                    }
+                }
+            });
+            ll_container.addView(checkbox);
+        }
+
+    }
+
+/*
     private class DependetsAsyncTask extends AsyncTask<Projeto, Void, Void>{
 
         ProgressDialog dialog;
@@ -216,7 +249,7 @@ public class CreateNewRequirementActivity  extends Activity{
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(isChecked){
-                            dependentes.add((Requisito)buttonView.getTag());
+                            dependentes.add((Dependent)buttonView.getTag());
                         }else {
                             dependentes.remove((Requisito)buttonView.getTag());
                         }
@@ -229,5 +262,5 @@ public class CreateNewRequirementActivity  extends Activity{
                 dialog.dismiss();
             }
         }
-    }
+    }*/
 }

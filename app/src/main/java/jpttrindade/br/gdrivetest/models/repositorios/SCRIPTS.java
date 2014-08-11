@@ -34,7 +34,7 @@ public class SCRIPTS {
                     PROJECT_TITLE+" TEXT NOT NULL," +
                     PROJECT_DESCRIPTION+" TEXT NOT NULL," +
                     PROJECT_MANAGER+" TEXT NOT NULL," +
-                    PROJECT_LASTREQUIREMENT+" INTEGER NOT NULL DEFAULT 1" +
+                    PROJECT_LASTREQUIREMENT+" INTEGER NOT NULL" +
             ");",
 
             "CREATE TABLE "+TABLE_REQUIREMENTS+"(" +
@@ -64,6 +64,8 @@ public class SCRIPTS {
             ");"
 
     };
+
+
 
 
 }
