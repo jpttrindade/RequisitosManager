@@ -59,8 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_below="@id/et_descricao"
-        android:layout_toRightOf="@id/separator1"
-        android:gravity="right"
+        android:layout_toLeftOf="@id/separator1"
+
         android:text="@string/createnewproject_requerente"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/label_requerente"
-        android:layout_toRightOf="@id/separator1"
+
         />
 
     <TextView
@@ -78,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/et_descricao"
+        android:layout_below="@id/et_requerente"
         android:layout_toLeftOf="@id/separator1"
         android:text="Status"
         android:textSize="20sp"
@@ -90,8 +90,32 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/label_status"
         android:layout_toLeftOf="@id/separator1"/>
+    <TextView
+        android:id="@+id/label_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/et_requerente"
+        android:layout_toRightOf="@id/separator1"
+        android:text="Tipo"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
+    <Spinner
+        android:id="@+id/spinner_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_status"
+        android:layout_toRightOf="@id/separator1"/>
 
+    <TextView
+        android:id="@+id/label_dependets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_status"
+        android:text="Dependets"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/bt_cancel"
@@ -100,7 +124,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/et_requerente"
+        android:layout_alignParentBottom="true"
         android:text="Cancel"/>
 
 
@@ -111,7 +135,27 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_toLeftOf="@id/bt_cancel"
-        android:layout_below="@id/et_requerente"
+        android:layout_alignParentBottom="true"
         android:text="Create"/>
 
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/label_dependets"
+        android:layout_above="@id/bt_create"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            />
+
+    </ScrollView>
 </RelativeLayout>

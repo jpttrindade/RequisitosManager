@@ -20,16 +20,25 @@ public class CreateNewProjectActivity extends Activity {
 
     EditText et_titulo, et_descricao, et_gerente;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_createnewproject);
 
+
+    private void initialize() {
         et_titulo = (EditText) findViewById(R.id.et_titulo);
         et_descricao = (EditText) findViewById(R.id.et_descricao);
         et_gerente = (EditText) findViewById(R.id.et_gerente);
 
         bt_create = (Button) findViewById(R.id.bt_create);
+
+        bt_cancel = (Button) findViewById(R.id.bt_cancel);
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_createnewproject);
+
+        initialize();
 
         bt_create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +58,7 @@ public class CreateNewProjectActivity extends Activity {
         });
 
 
-        bt_cancel = (Button) findViewById(R.id.bt_cancel);
+
 
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,4 +68,5 @@ public class CreateNewProjectActivity extends Activity {
             }
         });
     }
+
 }

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GDriveTest.iml" filepath="$PROJECT_DIR$/GDriveTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RequisitosManager.iml" filepath="$PROJECT_DIR$/RequisitosManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

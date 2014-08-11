@@ -3,12 +3,7 @@ package jpttrindade.br.gdrivetest.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -18,20 +13,23 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
     private String id;
     private String descricao;
-    private Status status;
+    private RequirementStatus status;
 
     private Date dataCriacao;
     private Date dataModificacao;
 
     private String requerente;
+
+    private RequerimentType type;
     private Projeto projeto;
     private ArrayList<Requisito> dependentes;
 
-    public Requisito(String titulo, String descricao, Status status, Date dataCriacao, Date dataModificacao,
-                     String requerente, Projeto projeto, ArrayList<Requisito> dependentes) {
+    public Requisito(String titulo, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
+                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Requisito> dependentes) {
         super(titulo);
         this.descricao = descricao;
         this.status = status;
+        this.type = type;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
         this.requerente = requerente;
@@ -39,17 +37,33 @@ public class Requisito extends SubItemMenu implements Parcelable{
         this.dependentes = dependentes;
     }
 
-    public Requisito(String titulo, String id, String descricao, Status status, Date dataCriacao,
+
+    public Requisito(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
                      Date dataModificacao, String requerente, Projeto projeto, ArrayList<Requisito> dependentes) {
         super(titulo);
         this.id = id;
         this.descricao = descricao;
         this.status = status;
+        this.type = type;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
         this.requerente = requerente;
         this.projeto = projeto;
         this.dependentes = dependentes;
+    }
+
+    public Requisito(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
+                     Date dataModificacao, String requerente, Projeto projeto) {
+        super(titulo);
+        this.id = id;
+        this.descricao = descricao;
+        this.status = status;
+        this.type = type;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+        this.requerente = requerente;
+        this.projeto = projeto;
+
     }
 
     public ArrayList<Requisito> getDependentes() {
@@ -64,8 +78,12 @@ public class Requisito extends SubItemMenu implements Parcelable{
         return descricao;
     }
 
-    public Status getStatus() {
+    public RequirementStatus getStatus() {
         return status;
+    }
+
+    public RequerimentType getType() {
+        return type;
     }
 
     public Date getDataCriacao() {
@@ -98,19 +116,19 @@ public class Requisito extends SubItemMenu implements Parcelable{
                 }
             };
 
+
     private Requisito(Parcel in){
         super(in.readString());
-            this.descricao = in.readString();
-            String sts = in.readString();
-            this.status = (sts.equals(Status.ABERTO.getStatus()) ? Status.ABERTO :
-                    (sts.equals(Status.CONCLUIDO.getStatus()) ? Status.CONCLUIDO :
-                            Status.STANDBY));
 
-            this.dataCriacao = new Date(in.readLong());//new SimpleDateFormat(SQLiteBDHelper.DATE_FORMAT).parse(in.readString());
-            this.dataModificacao = new Date(in.readLong());//new SimpleDateFormat(SQLiteBDHelper.DATE_FORMAT).parse(in.readString());
-            this.requerente = in.readString();
-            this.projeto = (Projeto) in.readParcelable(Projeto.class.getClassLoader());
-            in.readList(this.dependentes, Requisito.class.getClassLoader());
+        this.id = in.readString();
+        this.descricao = in.readString();
+        this.status = RequirementStatus.setStatus(in.readString());
+        this.type = RequerimentType.setType(in.readString());
+        this.dataCriacao = new Date(in.readLong());//new SimpleDateFormat(SQLiteBDHelper.DATE_FORMAT).parse(in.readString());
+        this.dataModificacao = new Date(in.readLong());//new SimpleDateFormat(SQLiteBDHelper.DATE_FORMAT).parse(in.readString());
+        this.requerente = in.readString();
+        this.projeto = (Projeto) in.readParcelable(Projeto.class.getClassLoader());
+       this.dependentes = in.readArrayList(Requisito.class.getClassLoader());
 
     }
 
@@ -122,12 +140,14 @@ public class Requisito extends SubItemMenu implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.getTitulo());
+        dest.writeString(this.id);
         dest.writeString(this.descricao);
-        dest.writeString(this.status.getStatus());
+        dest.writeString(this.status.toString());
+        dest.writeString(this.type.toString());
         dest.writeLong(this.dataCriacao.getTime());
         dest.writeLong(this.dataModificacao.getTime());
         dest.writeString(this.requerente);
         dest.writeParcelable(this.projeto, flags);
-        dest.writeTypedList(this.dependentes);
+        dest.writeList(this.dependentes);
     }
 }

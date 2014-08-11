@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -73,25 +75,39 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(mContext).inflate(R.layout.item_menu, null);
+        convertView = LayoutInflater.from(mContext).inflate(R.layout.requirement_item_menu, null);
         TextView tv_title = (TextView) convertView.findViewById(R.id.tv_title);
-        tv_title.setText(requirements.get(groupPosition).getTitulo());
+        TextView tv_id = (TextView) convertView.findViewById(R.id.tv_id);
+        TextView tv_status = (TextView) convertView.findViewById(R.id.tv_status);
+        TextView tv_type = (TextView) convertView.findViewById(R.id.tv_type);
+
+        Requisito req = requirements.get(groupPosition);
+        tv_title.setText(req.getTitulo());
+        tv_id.setText(req.getId());
+        tv_status.setText(req.getStatus().toString());
+        tv_type.setText(req.getType().toString());
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.desc_requirement, parent, false);
-        TextView id = (TextView) convertView.findViewById(R.id.tv_id);
-        TextView status = (TextView) convertView.findViewById(R.id.tv_status);
+     //   TextView id = (TextView) convertView.findViewById(R.id.tv_id);
+     //   TextView status = (TextView) convertView.findViewById(R.id.tv_status);
         TextView descricao = (TextView) convertView.findViewById(R.id.tv_descricao);
         TextView requerente = (TextView) convertView.findViewById(R.id.tv_requerente);
         TextView criacao = (TextView) convertView.findViewById(R.id.tv_criacao);
         TextView modificacao = (TextView) convertView.findViewById(R.id.tv_modificacao);
 
+        ListView lv_dependents = (ListView) convertView.findViewById(R.id.lv_dependents);
+
         Requisito req = requirements.get(groupPosition);
-        id.setText(req.getId());
-        status.setText(req.getStatus().getStatus());
+
+        DependentsAdapter dependentsAdapter = new DependentsAdapter(mContext, req.getDependentes());
+        lv_dependents.setAdapter(dependentsAdapter);
+
+     //   id.setText(req.getId());
+     //   status.setText(req.getStatus().toString());
         descricao.setText(req.getDescricao());
         requerente.setText(req.getRequerente());
         criacao.setText(req.getDataCriacao().toString());
@@ -118,7 +134,7 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = ProgressDialog.show(mContext, "","wait...");
+          //  dialog = ProgressDialog.show(mContext, "","wait...");
         }
 
         @Override

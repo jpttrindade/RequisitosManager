@@ -3,6 +3,7 @@ package jpttrindade.br.gdrivetest.views;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,8 +66,14 @@ public class RequirementsActivity extends ActionBarActivity {
                 switch (resultCode){
                     case RESULT_OK:
                         Toast.makeText(this, "Requisito criado com sucesso!", Toast.LENGTH_LONG).show();
-                        adapter.addRequirement((Requisito)data.getParcelableExtra("requirement"));
+                        Requisito newRequirement = (Requisito)data.getParcelableExtra("requirement");
+
+                      //  Log.d("DEBUG", "novo requisito_id = " + newRequirement.getId());
+
+                        adapter.addRequirement(newRequirement);
                         projeto = (Projeto) data.getParcelableExtra("projeto");
+
+                        RepositorioProjetos.getInstance(RequirementsActivity.this).updateProjeto(projeto);
                         break;
                     case RESULT_CANCELED:
                         Toast.makeText(this, "Requisito cancelado!", Toast.LENGTH_LONG).show();

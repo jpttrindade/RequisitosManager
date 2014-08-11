@@ -13,11 +13,10 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
 
 import jpttrindade.br.gdrivetest.models.Projeto;
 import jpttrindade.br.gdrivetest.R;
-import jpttrindade.br.gdrivetest.models.SQLiteBDHelper;
+import jpttrindade.br.gdrivetest.models.repositorios.SQLiteBDHelper;
 
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -35,6 +34,16 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     private Projeto projeto;
 
+
+    private void initialize() {
+        bt_newProject = (Button) findViewById(R.id.bt_newproject);
+        listView = (ExpandableListView) findViewById(R.id.listview);
+        adapter = new ListAdapter(this);
+        listView.setAdapter(adapter);
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,20 +51,15 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         SQLiteBDHelper.getInstance(this);
 
+        initialize();
 
-
-        bt_newProject = (Button) findViewById(R.id.bt_newproject);
         bt_newProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivityForResult(new Intent(MainActivity.this, CreateNewProjectActivity.class), CREATE_NEW_PROJECT);
             }
         });
 
-        listView = (ExpandableListView) findViewById(R.id.listview);
-        adapter = new ListAdapter(this);
-        listView.setAdapter(adapter);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override

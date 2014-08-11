@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="status" >
-        <item>Concluído</item>
         <item>Aberto</item>
+        <item>Acordado</item>
+        <item>Validação</item>
+        <item>Concluído</item>
         <item>Standby</item>
+    </string-array>
+
+    <string-array name="type" >
+        <item>Funcional</item>
+        <item>Não-Funcional</item>
     </string-array>
 </resources>
