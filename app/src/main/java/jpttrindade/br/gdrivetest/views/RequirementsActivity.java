@@ -23,6 +23,7 @@ import jpttrindade.br.gdrivetest.models.repositorios.RepositorioProjetos;
 public class RequirementsActivity extends ActionBarActivity {
 
     private static final  int CREATE_NEW_REQUIREMENT = 888;
+    private static final  int EDIT_REQUIREMENT = 999;
 
     private Button bt_newRequirement;
     private ExpandableListView lv_requirements;
@@ -60,6 +61,14 @@ public class RequirementsActivity extends ActionBarActivity {
 
     }
 
+    public void startEditRequirementActivity(Requisito requisito){
+        Intent it = new Intent(this, EditRequirementActivity.class);
+        it.putExtra("requirement", requisito);
+        it.putParcelableArrayListExtra("requirements", requirements);
+        adapter.removeRequirement(requisito);
+        startActivityForResult(it, EDIT_REQUIREMENT);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -84,6 +93,26 @@ public class RequirementsActivity extends ActionBarActivity {
 
                     default:
                 }
+                break;
+
+            case EDIT_REQUIREMENT:
+                Requisito requisito;
+                switch (resultCode){
+                    case RESULT_OK:
+                        Toast.makeText(this, "Requisito editado com sucesso!", Toast.LENGTH_LONG).show();
+                        requisito = (Requisito) data.getParcelableExtra("requirement");
+
+                        adapter.addRequirement(requisito);
+
+                        break;
+                    case RESULT_CANCELED:
+                        Toast.makeText(this, "Edição cancelada!", Toast.LENGTH_LONG).show();
+                        requisito = (Requisito) data.getParcelableExtra("requirement");
+                        adapter.addRequirement(requisito);
+                        break;
+                    default:
+                }
+                break;
         }
     }
 

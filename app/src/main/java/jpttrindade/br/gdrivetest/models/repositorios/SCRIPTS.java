@@ -27,6 +27,8 @@ public class SCRIPTS {
     public static String DEPENDENCE_ID_REQUIREMENT = "id_requirement";
     public static String DEPENDENCE_ID_PROJECT = "id_project";
     public static String DEPENDENCE_ID_DEPENDENT = "id_dependent";
+    public static final String DEPENDENCE_DESCRIPTION = "description";
+
 
     public static String[] CREATE = new String[]{
             "CREATE TABLE "+TABLE_PROJECT+"(" +

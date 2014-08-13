@@ -14,4 +14,8 @@ public abstract class SubItemMenu {
     public String getTitulo() {
         return titulo;
     }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 }

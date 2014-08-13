@@ -190,6 +190,9 @@ public class RepositorioRequirements {
 
         //preicsa atualizar os dependentes
 
+        RepositorioDependences.getInstance(mContext).insertDependences(requisito.getNewDependents());
+
+        RepositorioDependences.getInstance(mContext).removeDependeces(requisito.getRemovedDependets());
 
         return mDB.update(SCRIPTS.TABLE_REQUIREMENTS, values, SCRIPTS.REQUIREMENT_ID+"="+requisito.getId(), null);
 

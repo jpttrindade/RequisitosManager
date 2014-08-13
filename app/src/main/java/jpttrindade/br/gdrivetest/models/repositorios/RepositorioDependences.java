@@ -77,4 +77,28 @@ public class RepositorioDependences {
 
         return nDependence;
     }
+
+
+    public void insertDependences(ArrayList<Dependence> newDependents) {
+        if(newDependents.size()>0){
+            for(Dependence dependence:newDependents){
+                insertDependence(dependence);
+            }
+        }
+    }
+
+    public void removeDependeces(ArrayList<Dependence> removedDependets) {
+        if(removedDependets.size()>0){
+            for(Dependence dependence : removedDependets){
+                removeDependence(dependence);
+            }
+        }
+    }
+
+    private void removeDependence(Dependence dependence) {
+
+        mDB.delete(SCRIPTS.TABLE_DEPENDENCE,SCRIPTS.DEPENDENCE_ID_REQUIREMENT+"="+dependence.getId_requirement()+" AND "+
+                                            SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+ " AND "+
+                                            SCRIPTS.DEPENDENCE_ID_DEPENDENT+"="+dependence.getId_dependent(),null);
+    }
 }

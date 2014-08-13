@@ -5,7 +5,7 @@
     android:background="@color/common_action_bar_splitter"
     >
     <RelativeLayout
-        android:layout_width="match_parent" android:layout_height="300dp"
+        android:layout_width="match_parent" android:layout_height="400dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
@@ -74,19 +74,31 @@
 
 
 
+        <Button
+            android:id="@+id/bt_edit"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Edit"/>
+
+
         <View
             android:id="@+id/separator2"
             android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="50dp"
+            android:layout_above="@id/bt_edit"
             android:layout_centerHorizontal="true"/>
+
+
 
         <TextView
             android:id="@+id/tv_criacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@id/separator2"
+            android:layout_above="@id/bt_edit"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textSize="10sp"
@@ -97,7 +109,7 @@
             android:id="@+id/tv_modificacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/bt_edit"
             android:layout_toRightOf="@id/separator2"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
@@ -105,25 +117,6 @@
             android:gravity="center"
             android:background="#ffffff" />
 
-        <TextView
-            android:id="@+id/label_criacao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/tv_criacao"
-            android:layout_toLeftOf="@id/separator2"
-            android:text="Created"
-            android:textSize="@dimen/labels"
-            android:textStyle="bold"
-            />
-        <TextView
-            android:id="@+id/label_modificacao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/tv_modificacao"
-            android:layout_toRightOf="@id/separator2"
-            android:text="Last Modified"
-            android:textSize="@dimen/labels"
-            android:textStyle="bold"/>
         <TextView
             android:id="@+id/tv_requerente"
             android:layout_width="match_parent"
@@ -135,6 +128,30 @@
             android:textSize="@dimen/label_contents"
             android:background="@android:color/white"
             />
+
+
+
+        <TextView
+            android:id="@+id/label_criacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_criacao"
+            android:layout_below="@id/tv_requerente"
+            android:layout_toLeftOf="@id/separator2"
+            android:text="Created"
+            android:textSize="@dimen/labels"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/label_modificacao"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_above="@id/tv_modificacao"
+            android:layout_below="@id/tv_requerente"
+            android:layout_toRightOf="@id/separator2"
+            android:text="Last Modified"
+            android:textSize="@dimen/labels"
+            android:textStyle="bold"/>
         <View
             android:id="@+id/separator3"
             android:layout_width="match_parent"

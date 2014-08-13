@@ -1,7 +1,9 @@
 package jpttrindade.br.gdrivetest.views;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,14 +27,18 @@ import jpttrindade.br.gdrivetest.models.Requisito;
 /**
  * Created by jpttrindade on 07/08/14.
  */
-public class RequirementsAdapter extends BaseExpandableListAdapter{
+public class RequirementsAdapter extends BaseExpandableListAdapter implements View.OnClickListener{
 
     private Context mContext;
     private ArrayList<Requisito> requirements;
     private Projeto projeto;
 
-    public RequirementsAdapter(Context ctx, Projeto projeto, ArrayList<Requisito> requirements){
-        mContext = ctx;
+    private Activity mActivity;
+
+    public RequirementsAdapter(Activity activity, Projeto projeto, ArrayList<Requisito> requirements){
+
+        mActivity = activity;
+        mContext = activity;
         this.projeto = projeto;
         this.requirements = requirements;
 
@@ -101,6 +108,8 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
 
         ListView lv_dependents = (ListView) convertView.findViewById(R.id.lv_dependents);
 
+        Button bt_edit = (Button) convertView.findViewById(R.id.bt_edit);
+
         Requisito req = requirements.get(groupPosition);
 
         DependentsAdapter dependentsAdapter = new DependentsAdapter(mContext, req.getDependentes());
@@ -113,6 +122,8 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
         criacao.setText(req.getDataCriacao().toString());
         modificacao.setText(req.getDataModificacao().toString());
 
+        bt_edit.setTag(req);
+        bt_edit.setOnClickListener(this);
         return convertView;
     }
 
@@ -129,6 +140,17 @@ public class RequirementsAdapter extends BaseExpandableListAdapter{
 
     public void addRequirement(Requisito nReq){
         requirements.add(nReq);
+        notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        ((RequirementsActivity)mActivity).startEditRequirementActivity((Requisito)v.getTag());
+    }
+
+    public void removeRequirement(Requisito requisito) {
+        requirements.remove(requisito);
         notifyDataSetChanged();
     }
 

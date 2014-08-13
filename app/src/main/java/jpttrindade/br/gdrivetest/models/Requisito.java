@@ -20,9 +20,14 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
     private String requerente;
 
+
+
     private RequerimentType type;
     private Projeto projeto;
     private ArrayList<Dependence> dependentes;
+
+    private final ArrayList<Dependence> removedDependets = new ArrayList<Dependence>();
+    private final ArrayList<Dependence> newDependents = new ArrayList<Dependence>();
 
     public Requisito(String titulo, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
                      Date dataModificacao, String requerente, Projeto projeto, ArrayList<Dependence> dependentes) {
@@ -104,6 +109,71 @@ public class Requisito extends SubItemMenu implements Parcelable{
     public Projeto getProjeto() {
         return projeto;
     }
+
+
+    public void addNewDependence(Dependence dependence){
+        if(removedDependets.contains(dependence)){
+            removedDependets.remove(dependence);
+        }else {
+            newDependents.add(dependence);
+        }
+
+    }
+
+    public ArrayList<Dependence> getNewDependents(){
+
+        ArrayList<Dependence> retorno = new ArrayList<Dependence>();
+        retorno.addAll(newDependents);
+        newDependents.removeAll(newDependents);
+
+        return retorno;
+    }
+
+
+    public void addRemovedDependence(Dependence dependence){
+        for(int i = 0; i < dependentes.size(); i++){
+            if(dependentes.get(i).getId_dependent().equals(dependence.getId_dependent())){
+                dependentes.remove(i);
+                if(newDependents.contains(dependence)){
+                    newDependents.remove(dependence);
+                } else{
+                    removedDependets.add(dependence);
+                }
+            }
+        }
+    }
+
+    public ArrayList<Dependence> getRemovedDependets(){
+        ArrayList<Dependence> retorno = new ArrayList<Dependence>();
+
+        retorno.addAll(removedDependets);
+
+        removedDependets.removeAll(removedDependets);
+
+        return  retorno;
+    }
+
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setStatus(RequirementStatus status) {
+        this.status = status;
+    }
+
+    public void setDataModificacao(Date dataModificacao) {
+        this.dataModificacao = dataModificacao;
+    }
+
+    public void setRequerente(String requerente) {
+        this.requerente = requerente;
+    }
+
+    public void setType(RequerimentType type) {
+        this.type = type;
+    }
+
 
     public static Parcelable.Creator<Requisito> CREATOR =
             new Parcelable.Creator<Requisito>(){
