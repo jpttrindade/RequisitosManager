@@ -21,6 +21,8 @@ public enum RequirementStatus {
             default:
                 return "Aberto";
         }
+
+
     }
 
     public static RequirementStatus setStatus(String sts) {

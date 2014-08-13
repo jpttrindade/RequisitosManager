@@ -62,6 +62,7 @@ public class QUERY {
     public QUERY whereClause(String field, String value){
 
         query += (field+"="+value);
+
         return this;
     }
 

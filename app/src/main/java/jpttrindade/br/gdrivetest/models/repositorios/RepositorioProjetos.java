@@ -18,7 +18,6 @@ public class RepositorioProjetos {
     private static RepositorioProjetos singleton;
     private SQLiteDatabase mDB;
 
-
     private RepositorioProjetos(Context ctx){
         mContext = ctx.getApplicationContext();
         mDB =  SQLiteBDHelper.getInstance(mContext).getWritableDatabase();
