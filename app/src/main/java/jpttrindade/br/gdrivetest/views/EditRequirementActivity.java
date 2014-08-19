@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import jpttrindade.br.gdrivetest.R;
@@ -90,12 +91,17 @@ public class EditRequirementActivity extends Activity{
                 requirement.setDescricao(description.getText().toString());
                 requirement.setStatus(status);
                 requirement.setType(type);
+                requirement.setDataModificacao(Calendar.getInstance().getTime());
 
                 RepositorioRequirements.getInstance(EditRequirementActivity.this)
                                         .updateRequirement(requirement);
 
                 Intent it = new Intent();
+
+
                 it.putExtra("requirement", requirement);
+
+
                 setResult(RESULT_OK, it);
                 finish();
             }
@@ -189,6 +195,8 @@ public class EditRequirementActivity extends Activity{
 
         lv_dependents = (ListView) findViewById(R.id.lv_dependents);
 
+        lv_dependents.setAdapter(new DependencesAdapter());
+
         bt_save = (Button) findViewById(R.id.bt_save);
         bt_cancel = (Button) findViewById(R.id.bt_cancel);
 
@@ -221,21 +229,6 @@ public class EditRequirementActivity extends Activity{
             checkBox.setText(req.getTitulo());
 
 
-            for(Dependence dependence : requirement.getDependentes()){
-                if(dependence.getId_dependent() == req.getId()){
-                    checkBox.setChecked(true);
-                    break;
-                }
-            }
-
-            Dependence dependence = new Dependence(requirement.getId(), requirement.getProjeto().getId(), req.getId());
-
-            dependence.setTitle(req.getTitulo());
-            dependence.setDescription(req.getDescricao());
-
-            checkBox.setTag(dependence);
-
-
             checkBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 
                 @Override
@@ -248,6 +241,27 @@ public class EditRequirementActivity extends Activity{
                     }
                 }
             });
+
+
+            Dependence dependence = new Dependence(requirement.getId(), requirement.getProjeto().getId(), req.getId());
+
+            dependence.setTitle(req.getTitulo());
+            dependence.setDescription(req.getDescricao());
+
+            checkBox.setTag(dependence);
+
+
+            Log.d("DEBUG", "vai ver agora - "+requirement.getDependentes().size());
+
+            for(Dependence depen : requirement.getDependentes()){
+                Log.d("DEBUG", "id_depen "+depen.getId_dependent()+" id_req " +req.getId());
+                if(depen.getId_dependent().equals(req.getId())){
+                    Log.d("DEBUG", "id IGUAL");
+                    checkBox.setChecked(true);
+                }
+            }
+
+
 
             return checkBox;
         }

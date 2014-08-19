@@ -188,7 +188,6 @@ public class RepositorioRequirements {
         values.put(SCRIPTS.REQUIREMENT_DATE_MODIFICATION, requisito.getDataModificacao().getTime());
         values.put(SCRIPTS.REQUIREMENT_TYPE, requisito.getType().toString());
 
-        //preicsa atualizar os dependentes
 
         RepositorioDependences.getInstance(mContext).insertDependences(requisito.getNewDependents());
 

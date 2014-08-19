@@ -2,6 +2,7 @@ package jpttrindade.br.gdrivetest.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -124,7 +125,10 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
         ArrayList<Dependence> retorno = new ArrayList<Dependence>();
         retorno.addAll(newDependents);
-        newDependents.removeAll(newDependents);
+        dependentes.addAll(newDependents);
+
+        newDependents.clear();
+
 
         return retorno;
     }
@@ -148,7 +152,13 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
         retorno.addAll(removedDependets);
 
-        removedDependets.removeAll(removedDependets);
+        boolean limpou = dependentes.removeAll(removedDependets);
+
+
+
+        Log.d("DEBUG", "limpou="+limpou);
+
+        removedDependets.clear();
 
         return  retorno;
     }

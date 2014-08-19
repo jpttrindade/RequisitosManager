@@ -46,7 +46,7 @@ public class CreateNewProjectActivity extends Activity {
              Projeto nProjeto = new Projeto(et_titulo.getText().toString(), et_descricao.getText().toString(), et_gerente.getText().toString());
 
                 RepositorioProjetos.getInstance(CreateNewProjectActivity.this)
-                        .addProjeto(nProjeto);
+                        .insertProjeto(nProjeto);
 
 
 

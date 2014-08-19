@@ -15,7 +15,7 @@ public enum RequirementStatus {
             case ACORDADO:
                 return "Acordado";
             case CONCLUIDO:
-                return "Concluido";
+                return "Concluído";
             case STANDBY:
                 return "Standby";
             default:
@@ -26,9 +26,11 @@ public enum RequirementStatus {
     }
 
     public static RequirementStatus setStatus(String sts) {
-        return(sts.equals(RequirementStatus.ABERTO.toString()) ? RequirementStatus.ABERTO :
-                (sts.equals(RequirementStatus.CONCLUIDO.toString()) ? RequirementStatus.CONCLUIDO :
-                        RequirementStatus.STANDBY));
+        return (sts.equals(ABERTO.toString()) ? ABERTO :
+               (sts.equals(CONCLUIDO.toString()) ? CONCLUIDO :
+               (sts.equals(STANDBY.toString()) ? STANDBY :
+               (sts.equals(ACORDADO.toString()) ? ACORDADO :
+               VALIDACAO))));
     }
 }
 

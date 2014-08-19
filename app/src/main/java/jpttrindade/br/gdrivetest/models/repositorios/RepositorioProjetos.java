@@ -31,11 +31,12 @@ public class RepositorioProjetos {
         return singleton;
     }
 
-    public long addProjeto(Projeto nProjeto){
+    public long insertProjeto(Projeto nProjeto){
         ContentValues values = new ContentValues();
         values.put(SCRIPTS.PROJECT_TITLE, nProjeto.getTitulo());
         values.put(SCRIPTS.PROJECT_DESCRIPTION, nProjeto.getDescricao());
         values.put(SCRIPTS.PROJECT_MANAGER, nProjeto.getGerente());
+        values.put(SCRIPTS.PROJECT_LASTREQUIREMENT, 1);
 
         long id = mDB.insert(SCRIPTS.TABLE_PROJECT, null, values);
 

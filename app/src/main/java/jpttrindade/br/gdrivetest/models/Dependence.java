@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by joaotrindade on 11/08/14.
  */
-public class Dependence implements Parcelable {
+public class Dependence implements Parcelable{
 
     private String id_requirement;
     private String id_project;
@@ -84,4 +84,20 @@ public class Dependence implements Parcelable {
         dest.writeString(id_project);
         dest.writeString(id_dependent);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if(obj instanceof Dependence){
+           if(id_requirement.equals (((Dependence) obj).getId_requirement())
+                   &&
+              id_project.equals(((Dependence) obj).getId_project())
+                   &&
+              id_dependent.equals(((Dependence) obj).getId_dependent())){
+               result = true;
+           }
+        }
+        return result;
+    }
+
 }
