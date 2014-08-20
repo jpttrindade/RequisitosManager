@@ -3,13 +3,10 @@ package jpttrindade.br.gdrivetest.views;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,10 +16,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import jpttrindade.br.gdrivetest.R;
+import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.Projeto;
-import jpttrindade.br.gdrivetest.models.SubItemMenu;
+import jpttrindade.br.gdrivetest.models.Requirement;
 import jpttrindade.br.gdrivetest.models.repositorios.RepositorioRequirements;
-import jpttrindade.br.gdrivetest.models.Requisito;
 
 /**
  * Created by jpttrindade on 07/08/14.
@@ -30,12 +27,12 @@ import jpttrindade.br.gdrivetest.models.Requisito;
 public class RequirementsAdapter extends BaseExpandableListAdapter implements View.OnClickListener{
 
     private Context mContext;
-    private ArrayList<Requisito> requirements;
+    private ArrayList<Requirement> requirements;
     private Projeto projeto;
 
     private Activity mActivity;
 
-    public RequirementsAdapter(Activity activity, Projeto projeto, ArrayList<Requisito> requirements){
+    public RequirementsAdapter(Activity activity, Projeto projeto, ArrayList<Requirement> requirements){
 
         mActivity = activity;
         mContext = activity;
@@ -56,12 +53,12 @@ public class RequirementsAdapter extends BaseExpandableListAdapter implements Vi
     }
 
     @Override
-    public Requisito getGroup(int groupPosition) {
+    public Requirement getGroup(int groupPosition) {
         return requirements.get(groupPosition);
     }
 
     @Override
-    public Requisito getChild(int groupPosition, int childPosition) {
+    public Requirement getChild(int groupPosition, int childPosition) {
         return requirements.get(groupPosition);
     }
 
@@ -88,19 +85,20 @@ public class RequirementsAdapter extends BaseExpandableListAdapter implements Vi
         TextView tv_status = (TextView) convertView.findViewById(R.id.tv_status);
         TextView tv_type = (TextView) convertView.findViewById(R.id.tv_type);
 
-        Requisito req = requirements.get(groupPosition);
+        final Requirement req = requirements.get(groupPosition);
         tv_title.setText(req.getTitulo());
         tv_id.setText(req.getId());
         tv_status.setText(req.getStatus().toString());
         tv_type.setText(req.getType().toString());
+
+        convertView.setTag(req.getId());
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.desc_requirement, parent, false);
-     //   TextView id = (TextView) convertView.findViewById(R.id.tv_id);
-     //   TextView status = (TextView) convertView.findViewById(R.id.tv_status);
+
         TextView descricao = (TextView) convertView.findViewById(R.id.tv_descricao);
         TextView requerente = (TextView) convertView.findViewById(R.id.tv_requerente);
         TextView criacao = (TextView) convertView.findViewById(R.id.tv_criacao);
@@ -110,13 +108,11 @@ public class RequirementsAdapter extends BaseExpandableListAdapter implements Vi
 
         Button bt_edit = (Button) convertView.findViewById(R.id.bt_edit);
 
-        Requisito req = requirements.get(groupPosition);
+        Requirement req = requirements.get(groupPosition);
 
-        DependentsAdapter dependentsAdapter = new DependentsAdapter(mContext, req.getDependentes());
-        lv_dependents.setAdapter(dependentsAdapter);
+        DependencesAdapter dependencesAdapter = new DependencesAdapter(mContext, req.getDependences());
+        lv_dependents.setAdapter(dependencesAdapter);
 
-     //   id.setText(req.getId());
-     //   status.setText(req.getStatus().toString());
         descricao.setText(req.getDescricao());
         requerente.setText(req.getRequerente());
         criacao.setText(req.getDataCriacao().toString());
@@ -134,11 +130,11 @@ public class RequirementsAdapter extends BaseExpandableListAdapter implements Vi
     }
 
 
-    public ArrayList<Requisito> getRequirements() {
+    public ArrayList<Requirement> getRequirements() {
         return requirements;
     }
 
-    public void addRequirement(Requisito nReq){
+    public void addRequirement(Requirement nReq){
         requirements.add(nReq);
         notifyDataSetChanged();
     }
@@ -146,12 +142,17 @@ public class RequirementsAdapter extends BaseExpandableListAdapter implements Vi
 
     @Override
     public void onClick(View v) {
-        ((RequirementsActivity)mActivity).startEditRequirementActivity((Requisito)v.getTag());
+        ((RequirementsActivity)mActivity).startEditRequirementActivity((Requirement) v.getTag());
     }
 
-    public void removeRequirement(Requisito requisito) {
-        requirements.remove(requisito);
+    public void removeRequirement(Requirement requirement) {
+        requirements.remove(requirement);
         notifyDataSetChanged();
+    }
+
+    public void attAdapter(){
+        requirements = new ArrayList<Requirement>();
+        new GetRequirementsAsyncTask().execute();
     }
 
     private class GetRequirementsAsyncTask extends AsyncTask <Void, Void, Void> {
@@ -167,7 +168,7 @@ public class RequirementsAdapter extends BaseExpandableListAdapter implements Vi
            RepositorioRequirements repositorioRequirements =  RepositorioRequirements.getInstance(mContext);
 
 
-            ArrayList<Requisito> query = null;
+            ArrayList<Requirement> query = null;
             try {
                 query = repositorioRequirements.getRequisitos(projeto);
                 requirements.addAll(query);

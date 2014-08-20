@@ -24,9 +24,9 @@ public class SCRIPTS {
     public static String REQUIREMENT_TYPE= "type";
 
     public static String TABLE_DEPENDENCE = "TB_Dependencies";
-    public static String DEPENDENCE_ID_REQUIREMENT = "id_requirement";
+    public static String DEPENDENCE_ID_PARENT = "id_parent";
     public static String DEPENDENCE_ID_PROJECT = "id_project";
-    public static String DEPENDENCE_ID_DEPENDENT = "id_dependent";
+    public static String DEPENDENCE_ID_CHILD = "id_child";
     public static final String DEPENDENCE_DESCRIPTION = "description";
 
 
@@ -55,13 +55,13 @@ public class SCRIPTS {
             ");",
 
             "CREATE TABLE "+TABLE_DEPENDENCE+"(" +
-                    DEPENDENCE_ID_REQUIREMENT+" INTEGER NOT NULL," +
+                    DEPENDENCE_ID_PARENT +" INTEGER NOT NULL," +
                     DEPENDENCE_ID_PROJECT+" INTEGER NOT NULL," +
-                    DEPENDENCE_ID_DEPENDENT+" INTEGER NOT NULL," +
-                    "PRIMARY KEY ("+DEPENDENCE_ID_REQUIREMENT+", "+DEPENDENCE_ID_PROJECT+", "+DEPENDENCE_ID_DEPENDENT+")," +
-                    "FOREIGN KEY ("+DEPENDENCE_ID_REQUIREMENT+", "+DEPENDENCE_ID_PROJECT+")" +
+                    DEPENDENCE_ID_CHILD +" INTEGER NOT NULL," +
+                    "PRIMARY KEY ("+ DEPENDENCE_ID_PARENT +", "+DEPENDENCE_ID_PROJECT+", "+ DEPENDENCE_ID_CHILD +")," +
+                    "FOREIGN KEY ("+ DEPENDENCE_ID_PARENT +", "+DEPENDENCE_ID_PROJECT+")" +
                         "REFERENCES "+TABLE_REQUIREMENTS+" ("+REQUIREMENT_ID+", "+REQUIREMENT_PROJECT_ID+")," +
-                    "FOREIGN KEY ("+DEPENDENCE_ID_DEPENDENT+")" +
+                    "FOREIGN KEY ("+ DEPENDENCE_ID_CHILD +")" +
                         "REFERENCES "+TABLE_REQUIREMENTS+"("+REQUIREMENT_ID+")" +
             ");"
 

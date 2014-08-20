@@ -8,25 +8,25 @@ import android.os.Parcelable;
  */
 public class Dependence implements Parcelable{
 
-    private String id_requirement;
+    private String id_parent;
     private String id_project;
-    private String id_dependent;
+    private String id_child;
     private String description;
     private String title;
 
-    public Dependence(String id_requirement, String id_project, String id_dependent) {
-        this.id_requirement = id_requirement;
+    public Dependence(String id_parent, String id_project, String id_child) {
+        this.id_parent = id_parent;
         this.id_project = id_project;
-        this.id_dependent = id_dependent;
+        this.id_child = id_child;
     }
 
-    public Dependence(String id_project, String id_dependent) {
+    public Dependence(String id_parent, String id_project) {
         this.id_project = id_project;
-        this.id_dependent = id_dependent;
+        this.id_parent = id_parent;
     }
 
-    public void setId_requirement(String id_requirement) {
-        this.id_requirement = id_requirement;
+    public void setId_child(String id_child) {
+        this.id_child = id_child;
     }
 
     public void setDescription(String description) {
@@ -37,16 +37,16 @@ public class Dependence implements Parcelable{
         this.title = title;
     }
 
-    public String getId_requirement() {
-        return id_requirement;
+    public String getId_parent() {
+        return id_parent;
     }
 
     public String getId_project() {
         return id_project;
     }
 
-    public String getId_dependent() {
-        return id_dependent;
+    public String getId_child() {
+        return id_child;
     }
 
     public String getDescription() {
@@ -68,9 +68,9 @@ public class Dependence implements Parcelable{
     };
 
     private Dependence(Parcel in){
-        this.id_requirement = in.readString();
+        this.id_parent = in.readString();
         this.id_project = in.readString();
-        this.id_dependent = in.readString();
+        this.id_child = in.readString();
     }
 
     @Override
@@ -80,24 +80,10 @@ public class Dependence implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id_requirement);
+        dest.writeString(id_parent);
         dest.writeString(id_project);
-        dest.writeString(id_dependent);
+        dest.writeString(id_child);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = false;
-        if(obj instanceof Dependence){
-           if(id_requirement.equals (((Dependence) obj).getId_requirement())
-                   &&
-              id_project.equals(((Dependence) obj).getId_project())
-                   &&
-              id_dependent.equals(((Dependence) obj).getId_dependent())){
-               result = true;
-           }
-        }
-        return result;
-    }
 
 }

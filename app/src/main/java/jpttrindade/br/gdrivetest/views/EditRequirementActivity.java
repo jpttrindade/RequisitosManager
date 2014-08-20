@@ -1,6 +1,8 @@
 package jpttrindade.br.gdrivetest.views;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,23 +16,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import jpttrindade.br.gdrivetest.R;
 import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.RequerimentType;
+import jpttrindade.br.gdrivetest.models.Requirement;
 import jpttrindade.br.gdrivetest.models.RequirementStatus;
-import jpttrindade.br.gdrivetest.models.Requisito;
 import jpttrindade.br.gdrivetest.models.repositorios.RepositorioRequirements;
-
-import static jpttrindade.br.gdrivetest.R.layout.checkbox_dependents;
 
 /**
  * Created by joaotrindade on 13/08/14.
@@ -45,7 +43,7 @@ public class EditRequirementActivity extends Activity{
 
     ListView lv_dependents;
 
-    Button bt_save, bt_cancel;
+    Button bt_save, bt_cancel, bt_delete;
 
     RequirementStatus status;
     RequerimentType type;
@@ -54,8 +52,8 @@ public class EditRequirementActivity extends Activity{
 
 
 
-    private Requisito requirement;
-    private ArrayList<Requisito> requirements;
+    private Requirement requirement;
+    private ArrayList<Requirement> requirements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +61,6 @@ public class EditRequirementActivity extends Activity{
         setContentView(R.layout.activity_edit_requirement);
 
         initialize();
-
-
-
-
 
         title.setText(requirement.getTitulo());
         description.setText(requirement.getDescricao());
@@ -107,6 +101,33 @@ public class EditRequirementActivity extends Activity{
             }
         });
 
+        bt_delete.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog dialog = new AlertDialog.Builder(EditRequirementActivity.this).setTitle("Confimation")
+                        .setMessage("Are you sure?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                RepositorioRequirements.getInstance(EditRequirementActivity.this)
+                                                        .deleteRequirement(requirement);
+                                Intent it = new Intent();
+
+
+                                it.putExtra("id_reqDeleted", requirement.getId());
+
+                                setResult(RequirementsActivity.RESULT_REQUIREMENT_DELETED, it);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                            }
+                        }).show();
+            }
+        });
 
         spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -169,7 +190,7 @@ public class EditRequirementActivity extends Activity{
     }
 
     private void initialize() {
-        requirement = (Requisito)getIntent().getParcelableExtra("requirement");
+        requirement = (Requirement)getIntent().getParcelableExtra("requirement");
         requirements = getIntent().getParcelableArrayListExtra("requirements");
 
         Log.d("DEBUG", "REQUISITO REMOVIDO DA LISTA -- "+requirements.remove(requirement));
@@ -199,6 +220,7 @@ public class EditRequirementActivity extends Activity{
 
         bt_save = (Button) findViewById(R.id.bt_save);
         bt_cancel = (Button) findViewById(R.id.bt_cancel);
+        bt_delete = (Button) findViewById(R.id.bt_delete);
 
     }
 
@@ -224,17 +246,28 @@ public class EditRequirementActivity extends Activity{
 
             CheckBox checkBox =(CheckBox) LayoutInflater.from(EditRequirementActivity.this).inflate(R.layout.checkbox_dependents, null);
 
-            Requisito req = requirements.get(position);
+            Requirement req = requirements.get(position);
 
             checkBox.setText(req.getTitulo());
 
+            Dependence dependence = new Dependence(req.getId(), requirement.getProjeto().getId(), requirement.getId());
+
+            dependence.setTitle(req.getTitulo());
+            dependence.setDescription(req.getDescricao());
+
+            checkBox.setTag(dependence);
+
+            for(Dependence depen : requirement.getDependences()){
+                if(depen.getId_parent().equals(req.getId())){
+                    checkBox.setChecked(true);
+                }
+            }
 
             checkBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-
                         requirement.addNewDependence((Dependence) buttonView.getTag());
                     } else {
                         requirement.addRemovedDependence((Dependence) buttonView.getTag());
@@ -242,24 +275,6 @@ public class EditRequirementActivity extends Activity{
                 }
             });
 
-
-            Dependence dependence = new Dependence(requirement.getId(), requirement.getProjeto().getId(), req.getId());
-
-            dependence.setTitle(req.getTitulo());
-            dependence.setDescription(req.getDescricao());
-
-            checkBox.setTag(dependence);
-
-
-            Log.d("DEBUG", "vai ver agora - "+requirement.getDependentes().size());
-
-            for(Dependence depen : requirement.getDependentes()){
-                Log.d("DEBUG", "id_depen "+depen.getId_dependent()+" id_req " +req.getId());
-                if(depen.getId_dependent().equals(req.getId())){
-                    Log.d("DEBUG", "id IGUAL");
-                    checkBox.setChecked(true);
-                }
-            }
 
 
 

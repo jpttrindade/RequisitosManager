@@ -24,8 +24,8 @@ import jpttrindade.br.gdrivetest.R;
 import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.Projeto;
 import jpttrindade.br.gdrivetest.models.RequerimentType;
+import jpttrindade.br.gdrivetest.models.Requirement;
 import jpttrindade.br.gdrivetest.models.RequirementStatus;
-import jpttrindade.br.gdrivetest.models.Requisito;
 import jpttrindade.br.gdrivetest.models.repositorios.RepositorioRequirements;
 
 /**
@@ -47,8 +47,8 @@ public class CreateNewRequirementActivity  extends Activity{
     private Projeto projeto;
 
     private String titulo, descricao, requerente;
-    private ArrayList<Requisito> requirements;
-    private ArrayList<Dependence> dependentes;
+    private ArrayList<Requirement> requirements;
+    private ArrayList<Dependence> dependences;
 
     private void initialize() {
         requerente = descricao = titulo = "";
@@ -80,7 +80,7 @@ public class CreateNewRequirementActivity  extends Activity{
 
         requirements = getIntent().getParcelableArrayListExtra("requirements");
 
-        dependentes = new ArrayList<Dependence>();
+        dependences = new ArrayList<Dependence>();
         ll_container = (LinearLayout) findViewById(R.id.ll_container);
 
     }
@@ -127,17 +127,16 @@ public class CreateNewRequirementActivity  extends Activity{
 
                 if(isValid()) {
                     dataCricacao = Calendar.getInstance(TimeZone.getTimeZone("America/Recife")).getTime();
-                    String id = projeto.getIdNextRequirements() + "";
+                    String id = projeto.setIdNextRequirements() + "";
 
-                    //Log.d("DEBUG", "id = "+id);
-                    Requisito nRequisito = new Requisito(titulo, id, descricao, status, type, dataCricacao, dataCricacao,
-                            requerente, projeto, dependentes);
+                    Requirement nRequirement = new Requirement(titulo, id, descricao, status, type, dataCricacao, dataCricacao,
+                            requerente, projeto, dependences);
 
-                    RepositorioRequirements.getInstance(CreateNewRequirementActivity.this).insertRequirement(nRequisito);
+                    RepositorioRequirements.getInstance(CreateNewRequirementActivity.this).insertRequirement(nRequirement);
 
 
                     Intent it = new Intent();
-                    it.putExtra("requirement", nRequisito);
+                    it.putExtra("requirement", nRequirement);
                     it.putExtra("projeto", projeto);
                     setResult(RESULT_OK, it);
                     finish();
@@ -169,7 +168,6 @@ public class CreateNewRequirementActivity  extends Activity{
         descricao = tv_descricao.getText().toString();
         requerente = tv_requerente.getText().toString();
 
-
         if(titulo.isEmpty()){
             tv_titulo.requestFocus();
         } else if( descricao.isEmpty()){
@@ -187,10 +185,11 @@ public class CreateNewRequirementActivity  extends Activity{
         LayoutInflater inflater = LayoutInflater.from(CreateNewRequirementActivity.this);
         CheckBox checkbox = null;
         Dependence dependence;
-        for(Requisito req : requirements){
+
+        for(Requirement req : requirements){
             checkbox = (CheckBox) inflater.inflate(R.layout.checkbox_dependents,null);
             checkbox.setText(req.getTitulo());
-            dependence = new Dependence(projeto.getId(), req.getId());
+            dependence = new Dependence(req.getId(), projeto.getId());
 
             dependence.setTitle(req.getTitulo());
             dependence.setDescription(req.getDescricao());
@@ -201,10 +200,9 @@ public class CreateNewRequirementActivity  extends Activity{
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
-
-                        dependentes.add((Dependence)buttonView.getTag());
+                        dependences.add((Dependence) buttonView.getTag());
                     }else {
-                        dependentes.remove((Dependence)buttonView.getTag());
+                        dependences.remove(buttonView.getTag());
                     }
                 }
             });

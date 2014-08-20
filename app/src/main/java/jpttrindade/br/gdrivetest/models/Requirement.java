@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Created by jpttrindade on 07/08/14.
  */
-public class Requisito extends SubItemMenu implements Parcelable{
+public class Requirement extends SubItemMenu implements Parcelable{
 
     private String id;
     private String descricao;
@@ -25,46 +25,30 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
     private RequerimentType type;
     private Projeto projeto;
-    private ArrayList<Dependence> dependentes;
+    private ArrayList<Dependence> dependences;
 
     private final ArrayList<Dependence> removedDependets = new ArrayList<Dependence>();
     private final ArrayList<Dependence> newDependents = new ArrayList<Dependence>();
 
-    public Requisito(String titulo, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
-                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Dependence> dependentes) {
-        super(titulo);
-        this.descricao = descricao;
-        this.status = status;
-        this.type = type;
-        this.dataCriacao = dataCriacao;
-        this.dataModificacao = dataModificacao;
-        this.requerente = requerente;
-        this.projeto = projeto;
-        this.dependentes = dependentes;
 
+
+    public Requirement(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type, Date dataCriacao,
+                       Date dataModificacao, String requerente, Projeto projeto, ArrayList<Dependence> dependentes) {
+        this(titulo, id, descricao, status, type, dataCriacao, dataModificacao, requerente, projeto);
+        this.dependences = dependentes;
     }
 
 
-    public Requisito(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
-                     Date dataModificacao, String requerente, Projeto projeto, ArrayList<Dependence> dependentes) {
-        super(titulo);
+
+    public Requirement(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type, Date dataCriacao,
+                       Date dataModificacao, String requerente, Projeto projeto) {
+        this(titulo,descricao,status, type, dataCriacao, dataModificacao, requerente, projeto);
         this.id = id;
-        this.descricao = descricao;
-        this.status = status;
-        this.type = type;
-        this.dataCriacao = dataCriacao;
-        this.dataModificacao = dataModificacao;
-        this.requerente = requerente;
-        this.projeto = projeto;
-        this.dependentes = dependentes;
     }
 
-
-
-    public Requisito(String titulo, String id, String descricao, RequirementStatus status, RequerimentType type,Date dataCriacao,
-                     Date dataModificacao, String requerente, Projeto projeto) {
+    private Requirement(String titulo, String descricao, RequirementStatus status, RequerimentType type, Date dataCriacao,
+                        Date dataModificacao, String requerente, Projeto projeto ){
         super(titulo);
-        this.id = id;
         this.descricao = descricao;
         this.status = status;
         this.type = type;
@@ -75,8 +59,8 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
     }
 
-    public ArrayList<Dependence> getDependentes() {
-        return dependentes;
+    public ArrayList<Dependence> getDependences() {
+        return dependences;
     }
 
     public String getId() {
@@ -124,8 +108,10 @@ public class Requisito extends SubItemMenu implements Parcelable{
     public ArrayList<Dependence> getNewDependents(){
 
         ArrayList<Dependence> retorno = new ArrayList<Dependence>();
+
         retorno.addAll(newDependents);
-        dependentes.addAll(newDependents);
+
+        dependences.addAll(newDependents);
 
         newDependents.clear();
 
@@ -135,9 +121,9 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
 
     public void addRemovedDependence(Dependence dependence){
-        for(int i = 0; i < dependentes.size(); i++){
-            if(dependentes.get(i).getId_dependent().equals(dependence.getId_dependent())){
-                dependentes.remove(i);
+        for(int i = 0; i < dependences.size(); i++){
+            if(dependences.get(i).getId_child().equals(dependence.getId_child())){
+                dependences.remove(i);
                 if(newDependents.contains(dependence)){
                     newDependents.remove(dependence);
                 } else{
@@ -152,7 +138,7 @@ public class Requisito extends SubItemMenu implements Parcelable{
 
         retorno.addAll(removedDependets);
 
-        boolean limpou = dependentes.removeAll(removedDependets);
+        boolean limpou = dependences.removeAll(removedDependets);
 
 
 
@@ -185,22 +171,22 @@ public class Requisito extends SubItemMenu implements Parcelable{
     }
 
 
-    public static Parcelable.Creator<Requisito> CREATOR =
-            new Parcelable.Creator<Requisito>(){
+    public static Parcelable.Creator<Requirement> CREATOR =
+            new Parcelable.Creator<Requirement>(){
 
                 @Override
-                public Requisito createFromParcel(Parcel source) {
-                    return new Requisito(source);
+                public Requirement createFromParcel(Parcel source) {
+                    return new Requirement(source);
                 }
 
                 @Override
-                public Requisito[] newArray(int size) {
-                    return new Requisito[size];
+                public Requirement[] newArray(int size) {
+                    return new Requirement[size];
                 }
             };
 
 
-    private Requisito(Parcel in){
+    private Requirement(Parcel in){
         super(in.readString());
 
         this.id = in.readString();
@@ -211,7 +197,7 @@ public class Requisito extends SubItemMenu implements Parcelable{
         this.dataModificacao = new Date(in.readLong());//new SimpleDateFormat(SQLiteBDHelper.DATE_FORMAT).parse(in.readString());
         this.requerente = in.readString();
         this.projeto = (Projeto) in.readParcelable(Projeto.class.getClassLoader());
-       this.dependentes = in.readArrayList(Requisito.class.getClassLoader());
+       this.dependences = in.readArrayList(Requirement.class.getClassLoader());
 
     }
 
@@ -231,6 +217,6 @@ public class Requisito extends SubItemMenu implements Parcelable{
         dest.writeLong(this.dataModificacao.getTime());
         dest.writeString(this.requerente);
         dest.writeParcelable(this.projeto, flags);
-        dest.writeList(this.dependentes);
+        dest.writeList(this.dependences);
     }
 }

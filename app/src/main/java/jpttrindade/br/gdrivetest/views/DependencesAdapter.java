@@ -11,17 +11,16 @@ import java.util.ArrayList;
 
 import jpttrindade.br.gdrivetest.R;
 import jpttrindade.br.gdrivetest.models.Dependence;
-import jpttrindade.br.gdrivetest.models.Requisito;
 
 /**
  * Created by jpttrindade on 10/08/14.
  */
-public class DependentsAdapter extends BaseAdapter {
+public class DependencesAdapter extends BaseAdapter {
 
     private ArrayList<Dependence> dependencies;
      private Context mContext;
 
-    public DependentsAdapter(Context context, ArrayList<Dependence> dependencies){
+    public DependencesAdapter(Context context, ArrayList<Dependence> dependencies){
         mContext = context;
         this.dependencies = dependencies;
     }
@@ -49,7 +48,7 @@ public class DependentsAdapter extends BaseAdapter {
         TextView tv_title = (TextView) convertView.findViewById(R.id.tv_title);
         Dependence dependence = dependencies.get(position);
 
-        tv_id.setText(dependence.getId_dependent());
+        tv_id.setText(dependence.getId_parent());
         tv_title.setText(dependence.getDescription());
         return convertView;
     }

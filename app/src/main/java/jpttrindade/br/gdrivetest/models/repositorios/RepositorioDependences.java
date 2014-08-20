@@ -33,33 +33,30 @@ public class RepositorioDependences {
     public long insertDependence(Dependence dependence){
         ContentValues values = new ContentValues();
 
-        values.put(SCRIPTS.DEPENDENCE_ID_REQUIREMENT, dependence.getId_requirement());
+        values.put(SCRIPTS.DEPENDENCE_ID_PARENT, dependence.getId_parent());
         values.put(SCRIPTS.DEPENDENCE_ID_PROJECT, dependence.getId_project());
-        values.put(SCRIPTS.DEPENDENCE_ID_DEPENDENT, dependence.getId_dependent());
+        values.put(SCRIPTS.DEPENDENCE_ID_CHILD, dependence.getId_child());
 
         return mDB.insert(SCRIPTS.TABLE_DEPENDENCE,null, values);
     }
 
-    public ArrayList<Dependence> getDependencies(String id_requirement, String id_project) {
+    public ArrayList<Dependence> getDependencies(String id_child, String id_project) {
 
 
         ArrayList<Dependence> dependencies = new ArrayList<Dependence>();
 
-        String query = new QUERY().select(SCRIPTS.DEPENDENCE_ID_DEPENDENT).from(SCRIPTS.TABLE_DEPENDENCE)
-                                    .where().whereClause(SCRIPTS.DEPENDENCE_ID_REQUIREMENT,id_requirement)
+        String query = new QUERY().select(SCRIPTS.DEPENDENCE_ID_PARENT).from(SCRIPTS.TABLE_DEPENDENCE)
+                                    .where().whereClause(SCRIPTS.DEPENDENCE_ID_CHILD, id_child)
                                     .and().whereClause(SCRIPTS.DEPENDENCE_ID_PROJECT, id_project)
                                     .finish();
 
         Cursor c = mDB.rawQuery(query, null);
-        /*Cursor c = mDB.rawQuery("select "+SCRIPTS.DEPENDENCE_ID_DEPENDENT+" from "+SCRIPTS.TABLE_DEPENDENCE+
-                            " where "+SCRIPTS.DEPENDENCE_ID_REQUIREMENT+"="+id_requirement+
-                            " and "+SCRIPTS.DEPENDENCE_ID_PROJECT+"="+id_project+";", null);
-*/
+
 
         if(c.getCount()>0){
             c.moveToFirst();
             do{
-                dependencies.add(setDependent(c, id_requirement, id_project));
+                    dependencies.add(setDependent(c, id_child, id_project));
             }while (c.moveToNext());
         }
         c.close();
@@ -68,20 +65,21 @@ public class RepositorioDependences {
     }
 
 
-    private Dependence setDependent(Cursor c, String id_requirement,String id_project){
-/*        String id_requirement = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_REQUIREMENT));
-        String id_project = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_PROJECT));*/
-        String id_dependent = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_DEPENDENT));
+    private Dependence setDependent(Cursor c, String id_child,String id_project){
+       String id_parent = ""+c.getInt(c.getColumnIndex(SCRIPTS.DEPENDENCE_ID_PARENT));
 
-        Dependence nDependence = new Dependence(id_requirement, id_project, id_dependent);
+        Dependence nDependence = new Dependence(id_parent, id_project, id_child);
 
         return nDependence;
     }
 
 
-    public void insertDependences(ArrayList<Dependence> newDependents) {
+    public void insertDependences(ArrayList<Dependence> newDependents, String id_child) {
         if(newDependents.size()>0){
             for(Dependence dependence:newDependents){
+                if(id_child != null){
+                    dependence.setId_child(id_child);
+                }
                 insertDependence(dependence);
             }
         }
@@ -96,9 +94,42 @@ public class RepositorioDependences {
     }
 
     private void removeDependence(Dependence dependence) {
-
-        mDB.delete(SCRIPTS.TABLE_DEPENDENCE,SCRIPTS.DEPENDENCE_ID_REQUIREMENT+"="+dependence.getId_requirement()+" AND "+
+        mDB.delete(SCRIPTS.TABLE_DEPENDENCE,SCRIPTS.DEPENDENCE_ID_PARENT +"="+dependence.getId_parent()+" AND "+
                                             SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+ " AND "+
-                                            SCRIPTS.DEPENDENCE_ID_DEPENDENT+"="+dependence.getId_dependent(),null);
+                                            SCRIPTS.DEPENDENCE_ID_CHILD +"="+dependence.getId_child(),null);
+    }
+
+    public void deleteDependences(ArrayList<Dependence> dependentes) {
+        for(Dependence dependence : dependentes){
+            deleteDependence(dependence);
+        }
+    }
+
+    private void deleteDependence(Dependence dependence) {
+        /*mDB.delete(SCRIPTS.TABLE_DEPENDENCE, SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+
+                                            " AND (" +
+                                             SCRIPTS.DEPENDENCE_ID_PARENT +"="+dependence.getId_parent()+
+                                             " OR " +
+                                             SCRIPTS.DEPENDENCE_ID_PARENT +"="+dependence.getId_child()+
+                                             ") AND (" +
+                                             SCRIPTS.DEPENDENCE_ID_CHILD +"="+dependence.getId_child()+
+                                             " OR " +
+                                             SCRIPTS.DEPENDENCE_ID_CHILD +"="+dependence.getId_parent()+")"
+                                             , null);
+
+*/
+        mDB.delete(SCRIPTS.TABLE_DEPENDENCE, SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+
+                   " AND " +
+                   SCRIPTS.DEPENDENCE_ID_PARENT+"="+dependence.getId_parent()+
+                   " AND " +
+                   SCRIPTS.DEPENDENCE_ID_CHILD+"="+dependence.getId_child(), null);
+
+        mDB.delete(SCRIPTS.TABLE_DEPENDENCE,
+
+                SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+
+                        " AND " +
+                SCRIPTS.DEPENDENCE_ID_PARENT+"="+dependence.getId_child()
+                ,null
+        );
     }
 }

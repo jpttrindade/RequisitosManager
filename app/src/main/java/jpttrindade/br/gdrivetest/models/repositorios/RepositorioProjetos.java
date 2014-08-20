@@ -71,7 +71,6 @@ public class RepositorioProjetos {
     }
 
     public int updateProjeto(Projeto projeto){
-
         ContentValues values = new ContentValues();
 
         values.put(SCRIPTS.PROJECT_TITLE, projeto.getTitulo());

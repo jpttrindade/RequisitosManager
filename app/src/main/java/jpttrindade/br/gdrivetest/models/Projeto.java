@@ -2,6 +2,7 @@ package jpttrindade.br.gdrivetest.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Created by joaotrindade on 06/08/14.
@@ -41,10 +42,17 @@ public class Projeto extends SubItemMenu implements Parcelable{
         return id;
     }
 
-    public int getIdNextRequirements() {
+    public int setIdNextRequirements() {
         int retorno = idNextRequirements;
         idNextRequirements = idNextRequirements + 1;
+
+        Log.d("DEBUG", "NextID - "+retorno);
+
         return retorno;
+    }
+
+    public int getIdNextRequirements() {
+        return idNextRequirements;
     }
 
     public void setIdNextRequirements(int idNextRequirements) {

@@ -13,8 +13,8 @@ import java.util.Date;
 import jpttrindade.br.gdrivetest.models.Dependence;
 import jpttrindade.br.gdrivetest.models.Projeto;
 import jpttrindade.br.gdrivetest.models.RequerimentType;
+import jpttrindade.br.gdrivetest.models.Requirement;
 import jpttrindade.br.gdrivetest.models.RequirementStatus;
-import jpttrindade.br.gdrivetest.models.Requisito;
 
 /**
  * Created by jpttrindade on 07/08/14.
@@ -37,7 +37,7 @@ public class RepositorioRequirements {
         return singleton;
     }
 
-    public long insertRequirement(Requisito nRequirement){
+    public long insertRequirement(Requirement nRequirement){
 
         ContentValues values = new ContentValues();
 
@@ -50,7 +50,7 @@ public class RepositorioRequirements {
         String dataModificacao = ""+nRequirement.getDataModificacao().getTime();
         String requerente = nRequirement.getRequerente();
         String id_projeto = nRequirement.getProjeto().getId();
-        //ArrayList<Requisito> dependentes;
+
 
         values.put(SCRIPTS.REQUIREMENT_TITLE, titulo);
         values.put(SCRIPTS.REQUIREMENT_ID, id);
@@ -62,20 +62,15 @@ public class RepositorioRequirements {
         values.put(SCRIPTS.REQUIREMENT_REQUESTER, requerente);
         values.put(SCRIPTS.REQUIREMENT_PROJECT_ID, id_projeto);
 
-        RepositorioDependences repoDependents = RepositorioDependences.getInstance(mContext);
+        RepositorioDependences.getInstance(mContext).insertDependences(nRequirement.getDependences(), nRequirement.getId());
 
-        for(Dependence dependence : nRequirement.getDependentes()){
-            dependence.setId_requirement(nRequirement.getId());
-            long newID = repoDependents.insertDependence(dependence);
-            Log.d("DEBUG", "id_dependent --- "+newID);
-        }
+
 
         return mDB.insert(SCRIPTS.TABLE_REQUIREMENTS, null, values);
     }
 
-    public ArrayList<Requisito> getRequisitos(Projeto projeto) throws ParseException {
-        ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
-        //String query = "select * from " + SCRIPTS.TABLE_REQUIREMENTS+ " where "+SCRIPTS.PROJECT_ID+"=" + projeto.getId() + ";";
+    public ArrayList<Requirement> getRequisitos(Projeto projeto) throws ParseException {
+        ArrayList<Requirement> requirements = new ArrayList<Requirement>();
 
         String query = new QUERY().select().from(SCRIPTS.TABLE_REQUIREMENTS)
                 .where().whereClause(SCRIPTS.PROJECT_ID,projeto.getId())
@@ -108,7 +103,7 @@ public class RepositorioRequirements {
                 ArrayList<Dependence> dependences = RepositorioDependences.getInstance(mContext).getDependencies(id, projeto.getId());
 
 
-                requisitos.add(new Requisito(titulo, id, descricao, status,type, dataCriacao, dataModificacao, requerente, proj, dependences));
+                requirements.add(new Requirement(titulo, id, descricao, status,type, dataCriacao, dataModificacao, requerente, proj, dependences));
 
             } while(c.moveToNext());
         }
@@ -116,12 +111,12 @@ public class RepositorioRequirements {
         c.close();
         //Log.d("DEBUG", "reqs = "+requisitos.size());
 
-        return requisitos;
+        return requirements;
     }
 
 
-    public ArrayList<Requisito> getRequisitos(Projeto projeto, ArrayList<String> ids){
-        ArrayList<Requisito> requirements = new ArrayList<Requisito>();
+    public ArrayList<Requirement> getRequisitos(Projeto projeto, ArrayList<String> ids){
+        ArrayList<Requirement> requirements = new ArrayList<Requirement>();
 
 
         QUERY query = new QUERY().select().from(SCRIPTS.TABLE_REQUIREMENTS)
@@ -167,7 +162,7 @@ public class RepositorioRequirements {
                 String requerente = c.getString(c.getColumnIndex(SCRIPTS.REQUIREMENT_REQUESTER));
                 Projeto proj = projeto;
 
-                requirements.add(new Requisito(titulo, id, descricao, status,type, dataCriacao, dataModificacao, requerente, proj));
+                requirements.add(new Requirement(titulo, id, descricao, status,type, dataCriacao, dataModificacao, requerente, proj));
 
 
             }while (c.moveToNext());
@@ -178,24 +173,34 @@ public class RepositorioRequirements {
         return requirements;
     }
 
-    public int updateRequirement(Requisito requisito){
+    public int updateRequirement(Requirement requirement){
         ContentValues values = new ContentValues();
 
-        values.put(SCRIPTS.REQUIREMENT_TITLE, requisito.getTitulo());
-        values.put(SCRIPTS.REQUIREMENT_DESCRIPTION, requisito.getDescricao());
-        values.put(SCRIPTS.REQUIREMENT_REQUESTER, requisito.getRequerente());
-        values.put(SCRIPTS.REQUIREMENT_STATUS, requisito.getStatus().toString());
-        values.put(SCRIPTS.REQUIREMENT_DATE_MODIFICATION, requisito.getDataModificacao().getTime());
-        values.put(SCRIPTS.REQUIREMENT_TYPE, requisito.getType().toString());
+        values.put(SCRIPTS.REQUIREMENT_TITLE, requirement.getTitulo());
+        values.put(SCRIPTS.REQUIREMENT_DESCRIPTION, requirement.getDescricao());
+        values.put(SCRIPTS.REQUIREMENT_REQUESTER, requirement.getRequerente());
+        values.put(SCRIPTS.REQUIREMENT_STATUS, requirement.getStatus().toString());
+        values.put(SCRIPTS.REQUIREMENT_DATE_MODIFICATION, requirement.getDataModificacao().getTime());
+        values.put(SCRIPTS.REQUIREMENT_TYPE, requirement.getType().toString());
 
 
-        RepositorioDependences.getInstance(mContext).insertDependences(requisito.getNewDependents());
+        RepositorioDependences.getInstance(mContext).insertDependences(requirement.getNewDependents(), null);
 
-        RepositorioDependences.getInstance(mContext).removeDependeces(requisito.getRemovedDependets());
+        RepositorioDependences.getInstance(mContext).removeDependeces(requirement.getRemovedDependets());
 
-        return mDB.update(SCRIPTS.TABLE_REQUIREMENTS, values, SCRIPTS.REQUIREMENT_ID+"="+requisito.getId(), null);
+        return mDB.update(SCRIPTS.TABLE_REQUIREMENTS, values, SCRIPTS.REQUIREMENT_ID+"="+ requirement.getId() +
+                          " AND " +
+                          SCRIPTS.REQUIREMENT_PROJECT_ID+"="+ requirement.getProjeto().getId(), null);
 
     }
 
+    public void deleteRequirement(Requirement requirement) {
+        mDB.delete(SCRIPTS.TABLE_REQUIREMENTS, SCRIPTS.REQUIREMENT_ID+"="+requirement.getId()+
+                                               " AND " +
+                                               SCRIPTS.REQUIREMENT_PROJECT_ID+"="+requirement.getProjeto().getId(), null);
+
+        RepositorioDependences.getInstance(mContext).deleteDependences(requirement.getDependences());
+
+    }
 }
 
