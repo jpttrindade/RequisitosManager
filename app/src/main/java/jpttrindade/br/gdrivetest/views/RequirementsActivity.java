@@ -69,7 +69,7 @@ public class RequirementsActivity extends ActionBarActivity {
                         }
                     }
 
-                    AlertDialog dialog = new AlertDialog.Builder(RequirementsActivity.this).setTitle("Confimation")
+                    AlertDialog dialog = new AlertDialog.Builder(RequirementsActivity.this).setTitle("Delete "+req_deleted.getTitulo())
                             .setMessage("Are you sure?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override

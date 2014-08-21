@@ -118,7 +118,8 @@ public class RepositorioDependences {
                                              , null);
 
 */
-        mDB.delete(SCRIPTS.TABLE_DEPENDENCE, SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+
+        mDB.delete(SCRIPTS.TABLE_DEPENDENCE,
+                   SCRIPTS.DEPENDENCE_ID_PROJECT+"="+dependence.getId_project()+
                    " AND " +
                    SCRIPTS.DEPENDENCE_ID_PARENT+"="+dependence.getId_parent()+
                    " AND " +
